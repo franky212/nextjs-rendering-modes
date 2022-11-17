@@ -16,23 +16,41 @@ import styles from "../styles/Home.module.css";
 //   };
 // }
 
-export default function Home() {
-  const [pokemon, setPokemon] = useState([]);
+export async function getStaticProps() {
+  const response = await fetch("https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json");
 
-  useEffect(() => {
-    async function getPokemon() {
-      const response = await fetch("https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json");
-      setPokemon( await response.json() );
+  return {
+    props: {
+      pokemon: await response.json()
     }
-    getPokemon();
-  }, []);
+  }
+
+}
+
+export default function Home({pokemon}) {
+  
+  /***************************
+   Client-Side Rendering Code
+  ***************************/
+  // const [pokemon, setPokemon] = useState([]);
+
+  // useEffect(() => {
+  //   async function getPokemon() {
+  //     const response = await fetch("https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json");
+  //     setPokemon( await response.json() );
+  //   }
+  //   getPokemon();
+  // }, []);
+  /***************************
+   END: Client-Side Rendering Code
+  ***************************/
+
   return (
     <div className={styles.container}>
       <Head>
         <title>Pokemon List</title>
       </Head>
       <h2>Pokemon List</h2>
-      <p>hello</p>
       <div className={styles.grid}>
         {pokemon.map((pokemon) => (
           <div className={styles.card} key={pokemon.id}>
