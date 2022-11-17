@@ -1,37 +1,56 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import styles from "../../styles/Details.module.css";
 
-export async function getStaticPaths() {
-  const resp = await fetch(
-    "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json"
-  );
-  const pokemon = await resp.json();
+// export async function getStaticPaths() {
+//   const resp = await fetch(
+//     "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json"
+//   );
+//   const pokemon = await resp.json();
 
-  return {
-    paths: pokemon.map((pokemon) => ({
-      params: { id: pokemon.id.toString() },
-    })),
-    fallback: false,
-  };
-}
+//   return {
+//     paths: pokemon.map((pokemon) => ({
+//       params: { id: pokemon.id.toString() },
+//     })),
+//     fallback: false,
+//   };
+// }
 
-export async function getStaticProps({ params }) {
-  const resp = await fetch(
-    `https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${params.id}.json`
-  );
+// export async function getStaticProps({ params }) {
+//   const resp = await fetch(
+//     `https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${params.id}.json`
+//   );
 
-  return {
-    props: {
-      pokemon: await resp.json(),
-    },
-    // revalidate: 30,
-  };
-}
+//   return {
+//     props: {
+//       pokemon: await resp.json(),
+//     },
+//     // revalidate: 30,
+//   };
+// }
 
-export default function Details({ pokemon }) {
+export default function Details() {
+  const { query: { id } } = useRouter();
+
+  const [pokemon, setPokemon] = useState(null);
+
+  useEffect(() => {
+    async function getPokemon() {
+      const response = await fetch(`https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${id}.json`);
+      setPokemon( await response.json() );
+    }
+    if( id ) {
+      getPokemon();
+    }
+  }, [id]);
+
+  if(!pokemon) {
+    return null;
+  }
+
   return (
     <div>
       <Head>
