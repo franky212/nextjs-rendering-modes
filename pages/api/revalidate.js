@@ -3,6 +3,7 @@
 // https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration#using-on-demand-revalidation
 
 export default async function handler(req, res) {
+  // Gets list of all URLs to revalidate!
   for (const url of req.body) {
     await res.unstable_revalidate(url);
   }

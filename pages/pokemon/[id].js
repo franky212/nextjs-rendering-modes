@@ -5,33 +5,40 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import styles from "../../styles/Details.module.css";
 
+
+/*************************
+ * STATIC SITE GENERATION
+ ************************/
 // Returns a list of different paths we should be generating!
-export async function getStaticPaths() {
-  const resp = await fetch(
-    "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json"
-  );
-  const pokemon = await resp.json();
+// export async function getStaticPaths() {
+//   const resp = await fetch(
+//     "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json"
+//   );
+//   const pokemon = await resp.json();
 
-  return {
-    paths: pokemon.map((pokemon) => ({
-      params: { id: pokemon.id.toString() },
-    })),
-    fallback: false,
-  };
-}
+//   return {
+//     paths: pokemon.map((pokemon) => ({
+//       params: { id: pokemon.id.toString() },
+//     })),
+//     fallback: false,
+//   };
+// }
 
-export async function getStaticProps({ params }) {
-  const resp = await fetch(
-    `https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${params.id}.json`
-  );
+// export async function getStaticProps({ params }) {
+//   const resp = await fetch(
+//     `https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${params.id}.json`
+//   );
 
-  return {
-    props: {
-      pokemon: await resp.json(),
-    },
-    // revalidate: 30,
-  };
-}
+//   return {
+//     props: {
+//       pokemon: await resp.json(),
+//     },
+//     // revalidate: 30,
+//   };
+// }
+/*************************
+ * END: STATIC SITE GENERATION
+ ************************/
 
 // export async function getServerSideProps({ params }) {
 //   // Context contains params
@@ -44,28 +51,28 @@ export async function getStaticProps({ params }) {
 //   }
 // }
 
-export default function Details({ pokemon }) {
+export default function Details() {
 
   /***************************
    Client-Side Rendering Code
   ***************************/
-  // const { query: { id } } = useRouter();
+  const { query: { id } } = useRouter();
 
-  // const [pokemon, setPokemon] = useState(null);
+  const [pokemon, setPokemon] = useState(null);
 
-  // useEffect(() => {
-  //   async function getPokemon() {
-  //     const response = await fetch(`https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${id}.json`);
-  //     setPokemon( await response.json() );
-  //   }
-  //   if( id ) {
-  //     getPokemon();
-  //   }
-  // }, [id]);
+  useEffect(() => {
+    async function getPokemon() {
+      const response = await fetch(`https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${id}.json`);
+      setPokemon( await response.json() );
+    }
+    if( id ) {
+      getPokemon();
+    }
+  }, [id]);
 
-  // if(!pokemon) {
-  //   return null;
-  // }
+  if(!pokemon) {
+    return null;
+  }
   /***************************
    END: Client-Side Rendering Code
   ***************************/

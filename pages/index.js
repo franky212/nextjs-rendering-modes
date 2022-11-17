@@ -16,31 +16,31 @@ import styles from "../styles/Home.module.css";
 //   };
 // }
 
-export async function getStaticProps() {
-  const response = await fetch("https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json");
+// export async function getServerSideProps() {
+//   const response = await fetch("https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json");
 
-  return {
-    props: {
-      pokemon: await response.json()
-    }
-  }
+//   return {
+//     props: {
+//       pokemon: await response.json()
+//     }
+//   }
 
-}
+// }
 
-export default function Home({pokemon}) {
+export default function Home() {
   
   /***************************
    Client-Side Rendering Code
   ***************************/
-  // const [pokemon, setPokemon] = useState([]);
+  const [pokemon, setPokemon] = useState([]);
 
-  // useEffect(() => {
-  //   async function getPokemon() {
-  //     const response = await fetch("https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json");
-  //     setPokemon( await response.json() );
-  //   }
-  //   getPokemon();
-  // }, []);
+  useEffect(() => {
+    async function getPokemon() {
+      const response = await fetch("https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json");
+      setPokemon( await response.json() );
+    }
+    getPokemon();
+  }, []);
   /***************************
    END: Client-Side Rendering Code
   ***************************/
